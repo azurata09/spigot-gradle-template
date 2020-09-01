@@ -1,0 +1,3 @@
+name: @plugin_name@
+version: @plugin_version@
+main: @plugin_package@.@plugin_name@

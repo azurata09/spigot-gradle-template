@@ -1,0 +1,58 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+apply plugin: 'java'
+
+def plugin_name = pluginName
+def plugin_package = pluginPackage
+def plugin_version = pluginVersion
+def spigot_version = spigotVersion
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+  maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+}
+
+dependencies {
+  compileOnly 'org.spigotmc:spigot-api:${spigot_version}'
+}
+
+processResources {
+  from(sourceSets.main.resources.srcDirs) {
+    filter ReplaceTokens, tokens: [
+      plugin_name: plugin_name,
+      plugin_package: plugin_name,
+      plugin_version: plugin_version,
+    ]
+  }
+}
+
+task setup {
+  doLast {
+    def main_package = "src/main/java/" + plugin_package.replace(".", "/") + "/"
+    def main_class = main_package + plugin_name + ".java"
+
+    def dir = new File(main_package)
+    if(!dir.exists()) {
+      dir.mkdirs()
+    }
+
+    def file = new File(main_class)
+    if(!file.exists()) {
+      file.withWriter {
+        it.write "package " + plugin_package + ";\n"
+        it.write "\n"
+        it.write "public class " + plugin_name + " extends JavaPlugin {\n"
+        it.write "\n"
+        it.write "  @Override\n"
+        it.write "  public void onEnable() {\n"
+        it.write "    getLogger.info(\"Plugin is Enabled\");\n"
+        it.write "  }\n"
+        it.write "\n"
+        it.write "}\n"
+      }
+    }
+  }
+}
