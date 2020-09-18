@@ -23,7 +23,7 @@ processResources {
   from(sourceSets.main.resources.srcDirs) {
     filter ReplaceTokens, tokens: [
       plugin_name: plugin_name,
-      plugin_package: plugin_name,
+      plugin_package: plugin_package,
       plugin_version: plugin_version,
     ]
   }
