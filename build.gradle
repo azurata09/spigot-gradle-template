@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-  compileOnly 'org.spigotmc:spigot-api:${spigot_version}'
+  compileOnly 'org.spigotmc:spigot-api:' + spigot_version
 }
 
 processResources {
@@ -44,11 +44,13 @@ task setup {
       file.withWriter {
         it.write "package " + plugin_package + ";\n"
         it.write "\n"
+        it.write "import org.bukkit.plugin.java.JavaPlugin;\n"
+        it.write "\n"
         it.write "public class " + plugin_name + " extends JavaPlugin {\n"
         it.write "\n"
         it.write "  @Override\n"
         it.write "  public void onEnable() {\n"
-        it.write "    getLogger.info(\"Plugin is Enabled\");\n"
+        it.write "    getLogger().info(\"Plugin is Enabled\");\n"
         it.write "  }\n"
         it.write "\n"
         it.write "}\n"
